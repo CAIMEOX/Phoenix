@@ -1,0 +1,35 @@
+package packet
+
+import (
+	"phoenix/minecraft/nbt"
+	"phoenix/minecraft/protocol"
+)
+
+// AddVolumeEntity sends a volume entity's definition and components from server to client.
+type AddVolumeEntity struct {
+	// EntityRuntimeID ...
+	EntityRuntimeID uint64
+	// VolumeEntityData ...
+	VolumeEntityData map[string]interface{}
+	// EngineVersion ...
+	EngineVersion string
+}
+
+// ID ...
+func (*AddVolumeEntity) ID() uint32 {
+	return IDAddVolumeEntity
+}
+
+// Marshal ...
+func (pk *AddVolumeEntity) Marshal(w *protocol.Writer) {
+	w.Uint64(&pk.EntityRuntimeID)
+	w.NBT(&pk.VolumeEntityData, nbt.NetworkLittleEndian)
+	w.String(&pk.EngineVersion)
+}
+
+// Unmarshal ...
+func (pk *AddVolumeEntity) Unmarshal(r *protocol.Reader) {
+	r.Uint64(&pk.EntityRuntimeID)
+	r.NBT(&pk.VolumeEntityData, nbt.NetworkLittleEndian)
+	r.String(&pk.EngineVersion)
+}
